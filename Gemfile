@@ -40,6 +40,10 @@ gem 'dotenv-rails', groups: [:development, :test]
 # Json with Token token認証で使う
 gem 'jwt'
 
+# before_action :authenticate_user! を使うためのライブラリ
+gem 'devise'
+
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
