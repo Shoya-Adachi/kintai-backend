@@ -23,6 +23,13 @@ class Api::V1::AttendancePostsController < ApplicationController
   end
 
   def update
+    attendance = Kintai.find(params[:id])
+
+    if attendance.update(leaving_time: params[:end_time])
+      render json: { status: 'success', attendance: attendance }, status: :ok
+    else
+      render json: { status: 'error', errors: attendance.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   # 送られてくるパラメータの許可
