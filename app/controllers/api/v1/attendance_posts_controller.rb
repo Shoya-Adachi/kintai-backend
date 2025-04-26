@@ -2,6 +2,8 @@ class Api::V1::AttendancePostsController < ApplicationController
   # before_action :authenticate_user! 
 
   def index
+    attendance = Kintai.all
+    render json: attendance, status: :ok
   end
 
   def show
@@ -29,9 +31,9 @@ class Api::V1::AttendancePostsController < ApplicationController
   def create
     attendance = Kintai.build(
       user_id: params[:user_id],      
-      date: Date.today,  # 今日の日付
+      date: Date.today,  
       entry_time: params[:start_time],
-      leaving_time: nil  # 退社時間は未設定
+      leaving_time: nil  
     )
 
     if attendance.save
@@ -51,8 +53,14 @@ class Api::V1::AttendancePostsController < ApplicationController
     end
   end
 
-  # 送られてくるパラメータの許可
-  # def attendance_params
-  #   params.require(:attendance).permit(:start_time, :end_time)
-  # end
+  def destroy
+    attendance = Kintai.find(params[:id])
+
+    if attendance
+      attendance.destroy
+      head :no_content
+    else
+      render json: { error: 'AttendancePost not found' }, status: :not_found
+    end
+  end
 end
