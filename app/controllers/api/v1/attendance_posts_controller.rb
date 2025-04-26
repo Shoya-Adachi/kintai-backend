@@ -5,6 +5,25 @@ class Api::V1::AttendancePostsController < ApplicationController
   end
 
   def show
+    attendance = Kintai.find(params[:id])
+
+    if attendance
+      render json: {status: 'success', data: attendance}, status: :ok
+    else
+      render json: { status: 'error', errors: attendance.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def search
+    conditions = params.permit(:user_id, :date).to_h
+
+    attendance = Kintai.where(conditions)
+
+    if attendance
+      render json: {status: 'success', attendance: attendance}, status: :ok
+    else
+      render json: { status: 'error', errors: attendance.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def create
@@ -16,7 +35,7 @@ class Api::V1::AttendancePostsController < ApplicationController
     )
 
     if attendance.save
-      render json: { status: 'success', attendance: attendance }, status: :created
+      render json: { status: 'success', data: attendance }, status: :created
     else
       render json: { status: 'error', errors: attendance.errors.full_messages }, status: :unprocessable_entity
     end
@@ -26,7 +45,7 @@ class Api::V1::AttendancePostsController < ApplicationController
     attendance = Kintai.find(params[:id])
 
     if attendance.update(leaving_time: params[:end_time])
-      render json: { status: 'success', attendance: attendance }, status: :ok
+      render json: { status: 'success', data: attendance }, status: :ok
     else
       render json: { status: 'error', errors: attendance.errors.full_messages }, status: :unprocessable_entity
     end
