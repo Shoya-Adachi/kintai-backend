@@ -1,4 +1,4 @@
-module Authenticable
+module Authenticate
 
     #トークンをデコードし、ユーザーを返す
     def current_user
