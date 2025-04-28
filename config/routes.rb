@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  # APIモードでGET /に対するルートが必要ない場合、無視する
+  match '/', to: 'application#no_content', via: [:get, :head]
 
   namespace :api do
     namespace :v1 do
