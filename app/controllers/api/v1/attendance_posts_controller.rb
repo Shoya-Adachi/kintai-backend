@@ -3,7 +3,9 @@ class Api::V1::AttendancePostsController < ApplicationController
 
   def index
     attendance = Kintai.all
-    render json: attendance, status: :ok
+    render json: attendance.map { |post|
+      {date: post.date, startTime: post.entry_time, endTime: post.leaving_time}
+    }
   end
 
   def show
